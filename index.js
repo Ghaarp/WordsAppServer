@@ -6,6 +6,7 @@ const sequelize = require("./db");
 const models = require("./models/model");
 const appRouter = require("./routes/index");
 const PORT = process.env.PORT;
+const errorHandlingMiddleware = require("./middleware/errorHandling");
 
 const app = express();
 const googleImages = require("google-images");
@@ -17,7 +18,8 @@ const client = new googleImages(
 app.use(cors());
 app.use(express.json());
 
-app.use(appRouter);
+app.use("/", appRouter);
+app.use(errorHandlingMiddleware);
 
 const start = async () => {
   try {

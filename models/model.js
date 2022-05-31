@@ -1,11 +1,11 @@
-const card = require("./card");
-const friend = require("./friend");
-const picture = require("./picture");
-const user = require("./user");
+const Card = require("./card");
+const Friend = require("./friend");
+const Picture = require("./picture");
+const User = require("./user");
 
 module.exports = {
-  card,
-  friend,
-  picture,
-  user,
+  Card,
+  Friend,
+  Picture,
+  User,
 };
