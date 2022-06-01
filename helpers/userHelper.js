@@ -11,9 +11,21 @@ class UserHelper {
     });
   }
 
+  static getUser(req) {
+    return 1;
+  }
+
   static async findUser(loginParameter) {
     const login = loginParameter.toString();
     return await User.findOne({ where: { login } });
+  }
+
+  static async findMany(ids) {
+    return await User.findAll({
+      where: {
+        id: ids,
+      },
+    });
   }
 
   static async checkUserPasswordIsValid(user, password) {
@@ -21,7 +33,7 @@ class UserHelper {
       return false;
     }
 
-    return bcrypt.compareSync(password, user.password);
+    return await bcrypt.compare(password, user.password);
   }
 
   static async createUser(loginParameter, passwordParameter) {

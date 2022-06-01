@@ -1,10 +1,11 @@
 const router = require("express");
+const cardController = require("../controllers/cardController");
 
 const cardRouter = router();
 
-cardRouter.post("/findcardinfo");
-cardRouter.post("/getcardinfo");
-cardRouter.get("/getcardinfo=:cardId");
-cardRouter.post("/createCard");
+cardRouter.post("/findwordinfo", cardController.findExpressionInfo);
+cardRouter.post("/getcardslist", cardController.getCardsList);
+cardRouter.get("/getcardinfo=:cardId", cardController.getCardInfo);
+cardRouter.post("/createCard", cardController.createCard);
 
 module.exports = cardRouter;

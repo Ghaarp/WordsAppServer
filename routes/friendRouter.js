@@ -1,11 +1,11 @@
 const router = require("express");
+const friendController = require("../controllers/friendController");
 
 const friendRouter = router();
 
-friendRouter.post("/invite");
-friendRouter.post("/accept");
-friendRouter.post("/remove");
-friendRouter.post("/updateShareSettings");
-friendRouter.get("/friendlist");
+friendRouter.post("/invite", friendController.makeFriend);
+friendRouter.post("/remove", friendController.remove);
+friendRouter.post("/updateShareSettings", friendController.updateShareSettings);
+friendRouter.get("/friendlist", friendController.friendList);
 
 module.exports = friendRouter;

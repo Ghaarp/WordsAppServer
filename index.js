@@ -1,5 +1,9 @@
 require("dotenv").config();
 
+//DEV
+const translator = require("./core/translator");
+//DEV
+
 const cors = require("cors");
 const express = require("express");
 const sequelize = require("./db");
@@ -9,11 +13,6 @@ const PORT = process.env.PORT;
 const errorHandlingMiddleware = require("./middleware/errorHandling");
 
 const app = express();
-const googleImages = require("google-images");
-const client = new googleImages(
-  process.env.GOOGLE_CSE_ID,
-  process.env.GOOGLE_API_KEY
-);
 
 app.use(cors());
 app.use(express.json());
@@ -27,9 +26,8 @@ const start = async () => {
     await sequelize.sync();
     app.listen(parseInt(PORT), () => console.log(`Started on port ${PORT}`));
 
-    //client.search("chicken").then((img) => {
-    //  console.log(JSON.stringify(img));
-    //});
+    //await translator.translateWord("roll");
+    //let a = 0;
   } catch (e) {
     console.log(e);
   }
