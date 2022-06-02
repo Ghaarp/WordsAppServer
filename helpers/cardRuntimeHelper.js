@@ -10,7 +10,9 @@ class CardRuntimeHelper {
       throw ApiError.badRequest(
         `Expression is too short (must be at least ${minExpLength} characters)`
       );
-    const translation = await translator.translateExpression(expression);
+
+    const translatorObject = new translator(expression);
+    const translation = await translatorObject.translate();
     const imageData = await search.searchExpressionInfo(expression);
 
     return { translation, imageData };

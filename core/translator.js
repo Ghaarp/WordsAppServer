@@ -1,12 +1,16 @@
-const translate = require("@vitalets/google-translate-api");
+const translatorHelper = require("../helpers/translatorHelper");
+const translatorParser = require("../parse/translatorParser");
 
 class Translator {
-  static async translateExpression(expression) {
-    const translationRes = await translate(expression, {
-      from: "en",
-      to: "ru",
-    });
-    return translationRes.text;
+  constructor(expression) {
+    this._expression = expression;
+  }
+
+  async translate() {
+    const translation = await translatorHelper.fetchRawTranslationJson(
+      this._expression
+    );
+    return translatorParser.convertResult(translation);
   }
 }
 

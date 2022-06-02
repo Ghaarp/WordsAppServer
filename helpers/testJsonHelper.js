@@ -7,7 +7,7 @@ class TestJsonHelper {
   }
 
   writeTestFile(content) {
-    fs.writeFileSync("exampleAuto.json", content);
+    fs.writeFileSync("exampleAutoTranslate2.json", content);
   }
 }
 
