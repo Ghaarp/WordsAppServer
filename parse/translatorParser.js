@@ -1,10 +1,6 @@
 const definitionsParser = require("./items/definitionsParser");
 const examplesParser = require("./items/examplesParser");
-const synonymsParser = require("./items/synonymsParser");
-
-//.raw[3][1] - definitions
-//.raw[3][1][0][x][0] - type
-//.raw[3][1][0][x][1] - definitions ... [x][0] - explanation [x][1] - example
+const translationsParser = require("./items/translationsParser");
 
 //.raw[3][2][0] - examples ... [x][1] - example
 
@@ -12,19 +8,13 @@ const synonymsParser = require("./items/synonymsParser");
 //.raw[3][5][0][x][1] - synonyms ... [x][0] - synonym
 
 class TranslatorParser {
-  constructResult(
-    original,
-    translation,
-    definitions,
-    examples,
-    alternativeTranslations
-  ) {
+  constructResult(original, translation, definitions, examples, translations) {
     return {
       original,
       translation,
       definitions,
       examples,
-      alternativeTranslations,
+      translations,
     };
   }
 
@@ -34,18 +24,37 @@ class TranslatorParser {
     }
 
     const data = translation.raw[3]; //.raw[3] - additional data
-    const definitions = definitionsParser.extractDefinitions(data);
-    const examples = examplesParser.extractExamples(data[2][0]);
-    const alternativeTranslations =
-      synonymsParser.extractAlternativeTranslations(data[5][0]);
+    const definitions = this.isDataSectionValid(data, 1, 0)
+      ? definitionsParser.extractDefinitions(data[1][0])
+      : undefined;
+    const examples = this.isDataSectionValid(data, 2, 0)
+      ? examplesParser.extractExamples(data[2][0])
+      : undefined;
+    const translations = this.isDataSectionValid(data, 5, 0)
+      ? translationsParser.extractTranslations(data[5][0])
+      : undefined;
 
     return this.constructResult(
       translation.original,
       translation.text,
       definitions,
       examples,
-      alternativeTranslations
+      translations
     );
+  }
+
+  isDataSectionValid(data, x, y) {
+    if (
+      !data ||
+      data.length == 0 ||
+      !data[x] ||
+      data[x].length == 0 ||
+      !data[x][y] ||
+      data[x][y].length == 0
+    )
+      return false;
+
+    return true;
   }
 }
 

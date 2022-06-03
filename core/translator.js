@@ -10,7 +10,10 @@ class Translator {
     const translation = await translatorHelper.fetchRawTranslationJson(
       this._expression
     );
-    return translatorParser.convertResult(translation);
+
+    const result = translatorParser.convertResult(translation);
+    console.log(result);
+    return result;
   }
 }
 

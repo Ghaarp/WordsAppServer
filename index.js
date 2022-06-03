@@ -22,15 +22,12 @@ app.use(errorHandlingMiddleware);
 
 const start = async () => {
   try {
-    //await sequelize.authenticate();
-    //await sequelize.sync();
-    //app.listen(parseInt(PORT), () => console.log(`Started on port ${PORT}`));
+    await sequelize.authenticate();
+    await sequelize.sync();
+    app.listen(parseInt(PORT), () => console.log(`Started on port ${PORT}`));
 
-    //await translator.translateWord("roll");
-    //let a = 0;
-
-    const translatorObject = new translator("bear");
-    const translation = await translatorObject.translate();
+    //const translatorObject = new translator("bear");
+    //const translation = await translatorObject.translate();
   } catch (e) {
     console.log(e);
   }
