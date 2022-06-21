@@ -12,17 +12,25 @@ class CardController {
 
     if (!result) return;
 
-    const { expression } = req.body;
     return res.json({
-      expression,
-      translation: result.translation,
+      data: result.translation,
       imageData: result.imageData,
     });
   }
 
   async getCardsList(req, res, next) {}
 
-  async getCardInfo(req, res, next) {}
+  async getCardData(req, res, next) {
+    const result = await runtimeHelper.execute(
+      next,
+      cardRuntimeHelper.getCardData,
+      req.body
+    );
+
+    if (!result) return;
+
+    return res.json(result);
+  }
 
   async createCard(req, res, next) {}
 }

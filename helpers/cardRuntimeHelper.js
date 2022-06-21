@@ -1,6 +1,7 @@
 const search = require("../core/search");
 const translator = require("../core/translator");
 const ApiError = require("../Errors/ApiError");
+const cardDbHelper = require("../helpers/cardDbHelper");
 
 const minExpLength = 2;
 
@@ -16,6 +17,12 @@ class CardRuntimeHelper {
     const imageData = await search.searchExpressionInfo(expression);
 
     return { translation, imageData };
+  }
+
+  static async getCardData({ cardId }) {
+    if (!cardId) return;
+
+    return await cardDbHelper.findOneByID(cardId);
   }
 }
 

@@ -2,6 +2,7 @@ const sequelize = require("../db");
 const { DataTypes } = require("sequelize");
 const tInt = DataTypes.INTEGER;
 const tString = DataTypes.STRING;
+const tText = DataTypes.TEXT;
 
 const Card = sequelize.define("card", {
   id: {
@@ -9,14 +10,23 @@ const Card = sequelize.define("card", {
     primaryKey: true,
     autoIncrement: true,
   },
+  ownerId: {
+    type: tInt,
+  },
   word: {
     type: tString,
   },
   translation: {
     type: tString,
   },
-  ownerId: {
-    type: tInt,
+  translationData: {
+    type: tText,
+  },
+  image: {
+    type: tString,
+  },
+  images: {
+    type: tText,
   },
 });
 
