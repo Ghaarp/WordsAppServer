@@ -21,7 +21,7 @@ class TranslationsParser {
       if (!translation || translation.length < 4) return;
       const value = translation[0];
       const rarity = translation[3];
-      const synonyms = translation[2];
+      const synonyms = { items: translation[2] };
 
       return { value, rarity, synonyms };
     });

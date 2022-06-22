@@ -10,11 +10,9 @@ const translationsParser = require("./items/translationsParser");
 class TranslatorParser {
   constructResult(original, translation, definitions, examples, translations) {
     return {
+      additionalData: { definitions, examples, translations },
       original,
       translation,
-      definitions,
-      examples,
-      translations,
     };
   }
 
@@ -24,15 +22,24 @@ class TranslatorParser {
     }
 
     const data = translation.raw[3]; //.raw[3] - additional data
-    const definitions = this.isDataSectionValid(data, 1, 0)
+    const definitionsItems = this.isDataSectionValid(data, 1, 0)
       ? definitionsParser.extractDefinitions(data[1][0])
       : undefined;
-    const examples = this.isDataSectionValid(data, 2, 0)
+    const examplesItems = this.isDataSectionValid(data, 2, 0)
       ? examplesParser.extractExamples(data[2][0])
       : undefined;
-    const translations = this.isDataSectionValid(data, 5, 0)
+    const translationsItems = this.isDataSectionValid(data, 5, 0)
       ? translationsParser.extractTranslations(data[5][0])
       : undefined;
+
+    const examples =
+      examplesItems.length > 0 ? { items: examplesItems } : undefined;
+
+    const definitions =
+      definitionsItems.length > 0 ? { items: definitionsItems } : undefined;
+
+    const translations =
+      translationsItems.length > 0 ? { items: translationsItems } : undefined;
 
     return this.constructResult(
       translation.original,

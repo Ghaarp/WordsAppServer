@@ -32,7 +32,7 @@ class DefinitionParser {
     let value;
     let expression;
     let tags;
-    let synonyms;
+    let synonymGroups;
 
     if (definition[0] && definition.length > 0) value = definition[0];
 
@@ -42,33 +42,33 @@ class DefinitionParser {
       tags = this.parseTags(definition[4]);
 
     if (definition[5] && definition.length > 5)
-      synonyms = definition[5].map((synonymGroup) => {
+      synonymGroups = definition[5].map((synonymGroup) => {
         return this.parseSynonymGroup(synonymGroup);
       });
 
-    return { value, expression, tags, synonyms };
+    return { value, expression, tags, synonymGroups };
   }
 
   parseTags(tags) {
     return tags.map((tag) => {
-      if (tag && tag.length > 0 && tag[0]) return tag[0];
+      if (tag && tag.length > 0 && tag[0]) return { tag: tag[0] };
     });
   }
 
   parseSynonymGroup(synonymGroup) {
     if (!synonymGroup || synonymGroup.length == 0) return;
 
-    const synonyms = synonymGroup[0].map((synonym) => {
+    const items = synonymGroup[0].map((synonym) => {
       if (synonym && synonym.length > 0 && synonym[0]) {
-        return synonym[0];
+        return { synonym: synonym[0] };
       }
     });
 
-    if (synonymGroup.length < 2) return { synonyms };
+    if (synonymGroup.length < 2) return { items };
 
     const tags = this.parseTags(synonymGroup[1]);
 
-    return { synonyms, tags };
+    return { items, tags };
   }
 }
 
