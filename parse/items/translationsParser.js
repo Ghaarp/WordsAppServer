@@ -11,9 +11,9 @@ class TranslationsParser {
     if (!translationGroup || translationGroup.length < 2) return;
 
     const type = translationGroup[0];
-    const items = this.parseTranslations(translationGroup[1]);
+    const indexableItems = this.parseTranslations(translationGroup[1]);
 
-    return { type, items };
+    return { type, indexableItems };
   }
 
   parseTranslations(translations) {

@@ -33,7 +33,7 @@ class TranslatorParser {
       : undefined;
 
     const examples =
-      examplesItems.length > 0 ? { items: examplesItems } : undefined;
+      examplesItems.length > 0 ? { indexableItems: examplesItems } : undefined;
 
     const definitions =
       definitionsItems.length > 0 ? { items: definitionsItems } : undefined;

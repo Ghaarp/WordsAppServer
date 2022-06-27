@@ -21,20 +21,20 @@ class DefinitionParser {
     )
       return;
     const type = definitionsGroup[0];
-    const items = definitionsGroup[1].map((definition) => {
+    const indexableItems = definitionsGroup[1].map((definition) => {
       return this.parseDefinition(definition);
     });
-    return { type, items };
+    return { type, indexableItems };
   }
 
   parseDefinition(definition) {
     if (!definition) return;
-    let value;
+    let meaning;
     let expression;
     let tags;
     let synonymGroups;
 
-    if (definition[0] && definition.length > 0) value = definition[0];
+    if (definition[0] && definition.length > 0) meaning = definition[0];
 
     if (definition[1] && definition.length > 1) expression = definition[1];
 
@@ -46,7 +46,7 @@ class DefinitionParser {
         return this.parseSynonymGroup(synonymGroup);
       });
 
-    return { value, expression, tags, synonymGroups };
+    return { meaning, expression, tags, synonymGroups };
   }
 
   parseTags(tags) {
