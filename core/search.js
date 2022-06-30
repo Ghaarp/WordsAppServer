@@ -8,12 +8,15 @@ const client = new googleImages(
 
 class Search {
   static async searchExpressionInfo(expression) {
-    //client.search("chicken").then((img) => {
+    const result = await client.search(expression);
+    console.log(result);
+    return result;
+    //client.search(expression).then((img) => {
     //  //testJsonHelper.writeTestFile(JSON.stringify(img));
-    //  return img;
+    //return img;
     //});
     //Temporary real search disabled, using saved json for development
-    return await testJsonHelper.readTestFile();
+    //return await testJsonHelper.readTestFile();
   }
 }
 

@@ -6,7 +6,6 @@ class RuntimeHelper {
       return await action(params);
     } catch (e) {
       next(e);
-      return;
     }
   }
 }

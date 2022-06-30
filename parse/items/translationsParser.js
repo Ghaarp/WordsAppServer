@@ -13,7 +13,7 @@ class TranslationsParser {
     const type = translationGroup[0];
     const indexableItems = this.parseTranslations(translationGroup[1]);
 
-    return { type, indexableItems };
+    return { translations: { type, indexableItems } };
   }
 
   parseTranslations(translations) {
@@ -21,9 +21,15 @@ class TranslationsParser {
       if (!translation || translation.length < 4) return;
       const value = translation[0];
       const rarity = translation[3];
-      const synonyms = { items: translation[2] };
+      const synonymGroups = [
+        {
+          items: translation[2].map((item) => {
+            return { synonym: item };
+          }),
+        },
+      ];
 
-      return { value, rarity, synonyms };
+      return { value, rarity, synonymGroups };
     });
   }
 }

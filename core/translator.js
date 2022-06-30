@@ -11,9 +11,7 @@ class Translator {
       this._expression
     );
 
-    const result = translatorParser.convertResult(translation);
-    console.log(result);
-    return result;
+    return translatorParser.convertResult(translation);
   }
 }
 

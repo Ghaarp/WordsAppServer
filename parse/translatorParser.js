@@ -33,13 +33,19 @@ class TranslatorParser {
       : undefined;
 
     const examples =
-      examplesItems.length > 0 ? { indexableItems: examplesItems } : undefined;
+      examplesItems && examplesItems.length > 0
+        ? { indexableItems: examplesItems }
+        : undefined;
 
     const definitions =
-      definitionsItems.length > 0 ? { items: definitionsItems } : undefined;
+      definitionsItems && definitionsItems.length > 0
+        ? { items: definitionsItems }
+        : undefined;
 
     const translations =
-      translationsItems.length > 0 ? { items: translationsItems } : undefined;
+      translationsItems && translationsItems.length > 0
+        ? { items: translationsItems }
+        : undefined;
 
     return this.constructResult(
       translation.original,
