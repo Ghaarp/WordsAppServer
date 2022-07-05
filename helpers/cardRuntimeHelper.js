@@ -15,8 +15,16 @@ class CardRuntimeHelper {
     const translation = await translatorObject.translate();
     const imageData = await search.searchExpressionInfo(expression);
 
-    console.log(imageData);
-    return { translation, imageData };
+    return CardRuntimeHelper.makeExpressionInfoResponse(translation, {
+      imageData,
+    });
+  }
+
+  static makeExpressionInfoResponse(translation, imageData) {
+    if (translation.additionalData) {
+      translation.additionalData.imageData = imageData;
+    }
+    return { translation };
   }
 
   static async getCardData({ cardId }) {

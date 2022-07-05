@@ -33,7 +33,10 @@ class CardController {
     return res.json(result);
   }
 
-  async createCard(req, res, next) {}
+  async createCard(req, res, next) {
+    console.log(req.body);
+    return res.json("OK");
+  }
 }
 
 module.exports = new CardController();

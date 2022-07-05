@@ -8,9 +8,15 @@ const translationsParser = require("./items/translationsParser");
 //.raw[3][5][0][x][1] - synonyms ... [x][0] - synonym
 
 class TranslatorParser {
-  constructResult(original, translation, definitions, examples, translations) {
+  constructResult(
+    original,
+    translation,
+    definitionsData,
+    examplesData,
+    translationsData
+  ) {
     return {
-      additionalData: { definitions, examples, translations },
+      additionalData: { definitionsData, examplesData, translationsData },
       original,
       translation,
     };
@@ -32,17 +38,17 @@ class TranslatorParser {
       ? translationsParser.extractTranslations(data[5][0])
       : undefined;
 
-    const examples =
+    const examplesData =
       examplesItems && examplesItems.length > 0
         ? { indexableItems: examplesItems }
         : undefined;
 
-    const definitions =
+    const definitionsData =
       definitionsItems && definitionsItems.length > 0
         ? { items: definitionsItems }
         : undefined;
 
-    const translations =
+    const translationsData =
       translationsItems && translationsItems.length > 0
         ? { items: translationsItems }
         : undefined;
@@ -50,9 +56,9 @@ class TranslatorParser {
     return this.constructResult(
       translation.original,
       translation.text,
-      definitions,
-      examples,
-      translations
+      definitionsData,
+      examplesData,
+      translationsData
     );
   }
 
