@@ -5,6 +5,5 @@ const userRouter = router();
 
 userRouter.post("/login", userController.login);
 userRouter.post("/registration", userController.register);
-userRouter.get("/auth");
 
 module.exports = userRouter;

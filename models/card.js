@@ -13,7 +13,7 @@ const Card = sequelize.define("card", {
   ownerId: {
     type: tInt,
   },
-  word: {
+  expression: {
     type: tString,
   },
   translation: {
@@ -23,9 +23,6 @@ const Card = sequelize.define("card", {
     type: tText,
   },
   image: {
-    type: tString,
-  },
-  images: {
     type: tText,
   },
 });

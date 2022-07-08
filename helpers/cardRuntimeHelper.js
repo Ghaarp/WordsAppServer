@@ -32,6 +32,11 @@ class CardRuntimeHelper {
 
     return await cardDbHelper.findOneByID(cardId);
   }
+
+  static async createCard({ card, user }) {
+    if (!card) return;
+    return await cardDbHelper.createCard(card, user);
+  }
 }
 
 module.exports = CardRuntimeHelper;

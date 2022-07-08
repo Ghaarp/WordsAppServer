@@ -5,6 +5,9 @@ const ApiError = require("../Errors/ApiError");
 class CardController {
   async findExpressionInfo(req, res, next) {
     console.log(req.body);
+    const { user } = req.body;
+    console.log(user);
+
     const result = await runtimeHelper.execute(
       next,
       cardRuntimeHelper.fetchExpressionInfo,
@@ -35,7 +38,15 @@ class CardController {
 
   async createCard(req, res, next) {
     console.log(req.body);
-    return res.json("OK");
+    const result = await runtimeHelper.execute(
+      next,
+      cardRuntimeHelper.createCard,
+      req.body
+    );
+
+    if (!result) return;
+
+    return res.json(result);
   }
 }
 
