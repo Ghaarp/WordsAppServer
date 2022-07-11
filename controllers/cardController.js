@@ -1,6 +1,7 @@
 const cardRuntimeHelper = require("../helpers/cardRuntimeHelper");
 const runtimeHelper = require("../helpers/runtimeHelper");
 const ApiError = require("../Errors/ApiError");
+const cardDbHelper = require("../helpers/cardDbHelper");
 
 class CardController {
   async findExpressionInfo(req, res, next) {
@@ -22,7 +23,17 @@ class CardController {
     });
   }
 
-  async getCardsList(req, res, next) {}
+  async getCardsList(req, res, next) {
+    const result = await runtimeHelper.execute(
+      next,
+      cardDbHelper.getCardsList,
+      req.body
+    );
+
+    if (!result) return;
+
+    return res.json(result);
+  }
 
   async getCardData(req, res, next) {
     const result = await runtimeHelper.execute(

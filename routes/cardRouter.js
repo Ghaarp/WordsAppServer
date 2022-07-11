@@ -5,7 +5,7 @@ const checkIsAuthMiddleware = require("../middleware/checkIsAuthMiddleware");
 const cardRouter = router();
 
 cardRouter.post(
-  "/findwordinfo",
+  "/findexpressioninfo",
   checkIsAuthMiddleware,
   cardController.findExpressionInfo
 );
@@ -17,7 +17,7 @@ cardRouter.post(
 );
 
 cardRouter.get(
-  "/getcardinfo=:cardId",
+  "/getcarddata=:cardId",
   checkIsAuthMiddleware,
   cardController.getCardData
 );
