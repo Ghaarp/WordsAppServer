@@ -4,11 +4,15 @@ const sequelize = require("../db");
 
 class CardDbHelper {
   static async findOneByID(id) {
-    return await Card.findOne({
+    const result = await Card.findOne({
       where: {
         id,
       },
     });
+    if (!result) return;
+
+    const data = JSON.parse(result.cardJSON);
+    return { data };
   }
 
   static async findOneByExpression(expression) {
@@ -32,7 +36,7 @@ class CardDbHelper {
         ownerId: user?.id,
         expression: data.original,
         translation: data.translation,
-        translationData: JSON.stringify(card),
+        cardJSON: JSON.stringify(data),
         image: JSON.stringify(this._getMainImage(data)),
       });
 
@@ -45,7 +49,7 @@ class CardDbHelper {
         ownerId: user?.id,
         expression: data.original,
         translation: data.translation,
-        translationData: JSON.stringify(card),
+        cardJSON: JSON.stringify(data),
         image: JSON.stringify(this._getMainImage(data)),
       },
       {
@@ -107,8 +111,6 @@ class CardDbHelper {
     );
 
     if (!result || !result.length) throw ApiError.internal("Database error");
-
-    console.log(result[0]);
     return result[0];
   }
 

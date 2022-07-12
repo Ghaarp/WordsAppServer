@@ -5,9 +5,7 @@ const cardDbHelper = require("../helpers/cardDbHelper");
 
 class CardController {
   async findExpressionInfo(req, res, next) {
-    console.log(req.body);
     const { user } = req.body;
-    console.log(user);
 
     const result = await runtimeHelper.execute(
       next,
@@ -39,16 +37,15 @@ class CardController {
     const result = await runtimeHelper.execute(
       next,
       cardRuntimeHelper.getCardData,
-      req.body
+      req.params
     );
-
+    console.log(result);
     if (!result) return;
 
     return res.json(result);
   }
 
   async createCard(req, res, next) {
-    console.log(req.body);
     const result = await runtimeHelper.execute(
       next,
       cardRuntimeHelper.createCard,

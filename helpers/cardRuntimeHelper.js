@@ -29,7 +29,6 @@ class CardRuntimeHelper {
 
   static async getCardData({ cardId }) {
     if (!cardId) return;
-
     return await cardDbHelper.findOneByID(cardId);
   }
 

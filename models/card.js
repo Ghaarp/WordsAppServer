@@ -19,7 +19,7 @@ const Card = sequelize.define("card", {
   translation: {
     type: tString,
   },
-  translationData: {
+  cardJSON: {
     type: tText,
   },
   image: {
