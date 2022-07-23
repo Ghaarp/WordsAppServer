@@ -20,52 +20,76 @@ class FriendDbHelper {
     }
   }
 
-  static async inviteFriend({ user, friend }) {
-    await FriendDbHelper.checkIdsIsValid([user, friend]);
+  static async inviteFriend({ userId, friendLogin }) {
+    const friend = await userHelper.findUser(friendLogin);
+    if (!friend) return false;
 
-    let friendDb = await FriendDbHelper.findOne(user, friend);
+    let friendDb = await FriendDbHelper.findOne(userId, friend.id);
 
     if (friendDb) {
       return true;
     }
 
     friendDb = await Friend.create({
-      owner: user,
-      friend,
+      owner: userId,
+      friend: friend.id,
       shareCards: false,
     });
 
     return !!friendDb;
   }
 
-  static async removeFriend({ user, friend }) {
-    await FriendDbHelper.checkIdsIsValid([user, friend]);
+  static async removeFriend({ userId, friendLogin }) {
+    const friend = await userHelper.findUser(friendLogin);
+    if (!friend) return true;
 
     await Friend.destroy({
       where: {
-        owner: user,
-        friend,
+        owner: userId,
+        friend: friend.id,
       },
     });
+
     return true;
   }
 
-  static async updateShareSettings({ user, friend, shareCards }) {
-    await FriendDbHelper.checkIdsIsValid([user, friend]);
+  static async removeFriendshipRow({ userId, id }) {
+    const ownerRow = Friend.destroy({
+      where: {
+        id,
+        owner: userId,
+      },
+    });
 
-    const friendRow = await FriendDbHelper.findOne(user, friend);
+    const friendRow = Friend.destroy({
+      where: {
+        id,
+        friend: userId,
+      },
+    });
+
+    await ownerRow;
+    await friendRow;
+
+    return true;
+  }
+
+  static async updateShareSettings({ user, friendId, shareCards }) {
+    await FriendDbHelper.checkIdsIsValid([user.id, friendId]);
+
+    const friendRow = await FriendDbHelper.findOne(user.id, friendId);
     if (!friendRow) return false;
 
     const friendUpdated = await Friend.update(
       {
-        owner: user,
-        friend,
+        owner: user.id,
+        friend: friendId,
         shareCards,
       },
       {
         where: {
-          owner: user,
-          friend,
+          owner: user.id,
+          friend: friendId,
         },
       }
     );
@@ -73,29 +97,95 @@ class FriendDbHelper {
     return !!friendUpdated;
   }
 
-  static async fetchFriendList({ user }) {
+  static async fetchFriendList({ userId }) {
     let result = await sequelize.query(
-      "SELECT " +
-        "outgoing.owner AS user, " +
-        "outgoing.friend AS friend, " +
-        "CASE " +
-        "WHEN incoming.id IS NULL " +
-        "THEN false " +
-        "ELSE true " +
-        "END AS doublesided " +
-        "FROM " +
-        "friends as outgoing " +
-        "LEFT JOIN " +
-        "friends as incoming " +
-        "ON outgoing.owner = incoming.friend " +
-        "AND outgoing.friend = incoming.owner " +
-        "WHERE " +
-        `outgoing.owner = ${user}`
+      "WITH friendsList AS (\n" +
+        "  SELECT\n" +
+        "        outgoing.id AS id,\n" +
+        "        outgoing.owner AS user,\n" +
+        "        outgoing.friend AS friend,\n" +
+        '        outgoing."shareCards" AS shareCards,\n' +
+        "        CASE\n" +
+        "          WHEN incoming.id IS NULL\n" +
+        "          THEN false\n" +
+        "          ELSE true\n" +
+        "        END AS doublesided\n" +
+        "    FROM\n" +
+        "      friends as outgoing\n" +
+        "    LEFT JOIN\n" +
+        "      friends as incoming\n" +
+        "        ON outgoing.owner = incoming.friend\n" +
+        "        AND outgoing.friend = incoming.owner\n" +
+        "\n" +
+        "    WHERE\n" +
+        `      outgoing.owner = ${userId} \n` +
+        "\n" +
+        "  UNION ALL\n" +
+        "  \n" +
+        "  SELECT\n" +
+        "        outgoing.id AS id,\n" +
+        "        outgoing.owner AS user,\n" +
+        "        outgoing.friend AS friend,\n" +
+        '        outgoing."shareCards" AS shareCards,\n' +
+        "        CASE\n" +
+        "          WHEN incoming.id IS NULL\n" +
+        "          THEN false\n" +
+        "          ELSE true\n" +
+        "        END AS doublesided\n" +
+        "    FROM\n" +
+        "      friends as outgoing\n" +
+        "    LEFT JOIN\n" +
+        "      friends as incoming\n" +
+        "        ON outgoing.owner = incoming.friend\n" +
+        "        AND outgoing.friend = incoming.owner\n" +
+        "\n" +
+        "    WHERE\n" +
+        `    outgoing.friend = ${userId})\n` +
+        "    \n" +
+        "SELECT \n" +
+        "  friends.id AS id,\n" +
+        "  friends.user AS user,\n" +
+        "  friends.friend AS friend,\n" +
+        "  friends.shareCards AS shareCards,\n" +
+        "  CASE\n" +
+        "    WHEN friends.doublesided\n" +
+        "    THEN '0'\n" +
+        "    ELSE '1'\n" +
+        "  END AS type,\n" +
+        "  users.login AS friendlogin\n" +
+        "FROM \n" +
+        "  friendsList AS friends\n" +
+        "LEFT JOIN\n" +
+        "  users\n" +
+        "  ON friends.friend = users.id\n" +
+        "WHERE\n" +
+        `  friends.user = ${userId}\n` +
+        "  \n" +
+        "UNION ALL\n" +
+        "\n" +
+        "SELECT \n" +
+        "  friends.id AS id,\n" +
+        "  friends.user AS user,\n" +
+        "  friends.friend AS friend,\n" +
+        "  friends.shareCards AS shareCards,\n" +
+        "  '2' AS type,\n" +
+        "  users.login AS friendlogin\n" +
+        "FROM \n" +
+        "  friendsList AS friends\n" +
+        "LEFT JOIN\n" +
+        "  users\n" +
+        "  ON friends.user = users.id\n" +
+        "WHERE\n" +
+        `  friends.friend = ${userId}  \n` +
+        "  AND NOT friends.doublesided"
     );
 
     return result[0];
+
+    //Same query
     /*
-    SELECT
+WITH friendsList AS (
+	SELECT
         outgoing.owner AS user,
         outgoing.friend AS friend,
         CASE
@@ -111,7 +201,60 @@ class FriendDbHelper {
         AND outgoing.friend = incoming.owner
 
     WHERE
-      outgoing.owner = 1*/
+      outgoing.owner = 8 
+
+	UNION ALL
+	
+	SELECT
+        outgoing.owner AS user,
+        outgoing.friend AS friend,
+        CASE
+          WHEN incoming.id IS NULL
+          THEN false
+          ELSE true
+        END AS doublesided
+    FROM
+      friends as outgoing
+    LEFT JOIN
+      friends as incoming
+        ON outgoing.owner = incoming.friend
+        AND outgoing.friend = incoming.owner
+
+    WHERE
+	  outgoing.friend = 8)
+	  
+SELECT 
+	friends.user AS user,
+	friends.friend AS friend,
+	CASE
+		WHEN friends.doublesided
+		THEN '0'
+		ELSE '1'
+	END AS type,
+	users.login AS friendlogin
+FROM 
+	friendsList AS friends
+LEFT JOIN
+	users
+	ON friends.friend = users.id
+WHERE
+	friends.user = 8
+	
+UNION ALL
+
+SELECT 
+	friends.user AS user,
+	friends.friend AS friend,
+	'2' AS type,
+	users.login AS friendlogin
+FROM 
+	friendsList AS friends
+LEFT JOIN
+	users
+	ON friends.user = users.id
+WHERE
+	friends.friend = 8	
+	AND NOT friends.doublesided*/
   }
 }
 

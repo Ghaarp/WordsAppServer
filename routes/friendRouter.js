@@ -4,21 +4,30 @@ const checkIsAuthMiddleware = require("../middleware/checkIsAuthMiddleware");
 
 const friendRouter = router();
 
-friendRouter.post(
-  "/invite",
+friendRouter.get(
+  "/invitefriend=:login",
   checkIsAuthMiddleware,
-  friendController.makeFriend
+  friendController.inviteFriend
 );
-friendRouter.post("/remove", checkIsAuthMiddleware, friendController.remove);
-friendRouter.post(
-  "/updateShareSettings",
+friendRouter.get(
+  "/removefriend=:login",
   checkIsAuthMiddleware,
-  friendController.updateShareSettings
+  friendController.removeFriend
+);
+friendRouter.get(
+  "/removefriendshiprow=:id",
+  checkIsAuthMiddleware,
+  friendController.removeFriendshipRow
+);
+friendRouter.post(
+  "/optionsharecards",
+  checkIsAuthMiddleware,
+  friendController.optionShareCards
 );
 friendRouter.get(
   "/friendlist",
   checkIsAuthMiddleware,
-  friendController.friendList
+  friendController.fetchFriendList
 );
 
 module.exports = friendRouter;
