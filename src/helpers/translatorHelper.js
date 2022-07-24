@@ -1,5 +1,5 @@
 const translate = require("@vitalets/google-translate-api");
-const testJsonHelper = require("../helpers/testJsonHelper");
+const testJsonHelper = require("./testJsonHelper");
 
 class TranslatorHelper {
   static async fetchRawTranslationJson(expression) {

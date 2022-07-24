@@ -1,13 +1,8 @@
-require("dotenv").config();
-
-//DEV
-const translator = require("./core/translator");
-//DEV
+require("dotenv").config({ path: "src/.env" });
 
 const cors = require("cors");
 const express = require("express");
 const sequelize = require("./db");
-const models = require("./models/model");
 const appRouter = require("./routes/index");
 const PORT = process.env.PORT;
 const errorHandlingMiddleware = require("./middleware/errorHandling");

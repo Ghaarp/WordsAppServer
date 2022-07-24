@@ -1,6 +1,6 @@
 const sequelize = require("../db");
 const { Friend } = require("../models/model");
-const userHelper = require("../helpers/userHelper");
+const userHelper = require("./userHelper");
 const ApiError = require("../Errors/ApiError");
 
 class FriendDbHelper {
