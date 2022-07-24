@@ -2,7 +2,7 @@ const fs = require("fs");
 
 class TestJsonHelper {
   async readTestFile() {
-    const fileResult = fs.readFileSync("exampleAuto.json", "utf8");
+    const fileResult = fs.readFileSync("src/exampleAuto.json", "utf8");
     return JSON.parse(fileResult);
   }
 
