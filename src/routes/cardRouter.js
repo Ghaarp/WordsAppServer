@@ -28,4 +28,10 @@ cardRouter.post(
   cardController.createCard
 );
 
+cardRouter.post(
+  "/removeCard",
+  checkIsAuthMiddleware,
+  cardController.removeCard
+);
+
 module.exports = cardRouter;

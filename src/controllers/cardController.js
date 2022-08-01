@@ -28,6 +28,8 @@ class CardController {
       req.body
     );
 
+    console.log(result);
+
     if (!result) return;
 
     return res.json(result);
@@ -39,7 +41,18 @@ class CardController {
       cardRuntimeHelper.getCardData,
       req.params
     );
-    console.log(result);
+    if (!result) return;
+
+    return res.json(result);
+  }
+
+  async removeCard(req, res, next) {
+    console.log(req.body);
+    const result = await runtimeHelper.execute(
+      next,
+      cardRuntimeHelper.removeCard,
+      req.body
+    );
     if (!result) return;
 
     return res.json(result);

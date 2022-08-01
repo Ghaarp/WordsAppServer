@@ -28,13 +28,20 @@ class CardRuntimeHelper {
   }
 
   static async getCardData({ cardId }) {
-    if (!cardId) return;
+    if (!cardId)
+      throw ApiError.badRequest("Не указаны данные карточки для поиска");
     return await cardDbHelper.findOneByID(cardId);
   }
 
   static async createCard({ card, user }) {
-    if (!card) return;
+    if (!card) throw ApiError.badRequest("Неверные данные карточки");
     return await cardDbHelper.createCard(card, user);
+  }
+
+  static async removeCard({ user, cardId }) {
+    if (!cardId || !user)
+      throw ApiError.badRequest("Не удалось удалить карточку");
+    return await cardDbHelper.removeCard(user, cardId);
   }
 }
 

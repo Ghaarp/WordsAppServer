@@ -16,13 +16,16 @@ class FriendDbHelper {
   static async checkIdsIsValid(ids) {
     const users = await userHelper.findMany(ids);
     if (users.length != ids.length) {
-      throw ApiError.badRequest("Wrong user id");
+      throw ApiError.badRequest("Неизвестный пользователь");
     }
   }
 
   static async inviteFriend({ userId, friendLogin }) {
     const friend = await userHelper.findUser(friendLogin);
-    if (!friend) return false;
+    if (!friend) throw ApiError.badRequest("Нет пользователя с таким логином");
+
+    if (friend.id === userId)
+      throw ApiError.badRequest("Нельзя добавить самого себя в друзья");
 
     let friendDb = await FriendDbHelper.findOne(userId, friend.id);
 

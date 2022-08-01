@@ -1,6 +1,7 @@
 const definitionsParser = require("./items/definitionsParser");
 const examplesParser = require("./items/examplesParser");
 const translationsParser = require("./items/translationsParser");
+const fixesParser = require("./items/fixesParser");
 
 //.raw[3][2][0] - examples ... [x][1] - example
 
@@ -11,6 +12,7 @@ class TranslatorParser {
   constructResult(
     original,
     translation,
+    fix,
     definitionsData,
     examplesData,
     translationsData
@@ -19,6 +21,7 @@ class TranslatorParser {
       additionalData: { definitionsData, examplesData, translationsData },
       original,
       translation,
+      fix,
     };
   }
 
@@ -27,35 +30,28 @@ class TranslatorParser {
       return this.constructResult(translation.original, translation.text);
     }
 
+    const fix = fixesParser.extractFix(translation);
+
     const data = translation.raw[3]; //.raw[3] - additional data
-    const definitionsItems = this.isDataSectionValid(data, 1, 0)
-      ? definitionsParser.extractDefinitions(data[1][0])
-      : undefined;
-    const examplesItems = this.isDataSectionValid(data, 2, 0)
-      ? examplesParser.extractExamples(data[2][0])
-      : undefined;
-    const translationsItems = this.isDataSectionValid(data, 5, 0)
-      ? translationsParser.extractTranslations(data[5][0])
-      : undefined;
-
-    const examplesData =
-      examplesItems && examplesItems.length > 0
-        ? { indexableItems: examplesItems }
-        : undefined;
-
-    const definitionsData =
-      definitionsItems && definitionsItems.length > 0
-        ? { items: definitionsItems }
-        : undefined;
-
-    const translationsData =
-      translationsItems && translationsItems.length > 0
-        ? { items: translationsItems }
-        : undefined;
-
+    const definitionsItems =
+      this.isDataSectionValid(data, 1, 0) &&
+      definitionsParser.extractDefinitions(data[1][0]);
+    const examplesItems =
+      this.isDataSectionValid(data, 2, 0) &&
+      examplesParser.extractExamples(data[2][0]);
+    const translationsItems =
+      this.isDataSectionValid(data, 5, 0) &&
+      translationsParser.extractTranslations(data[5][0]);
+    const examplesData = examplesItems &&
+      examplesItems.length > 0 && { indexableItems: examplesItems };
+    const definitionsData = definitionsItems &&
+      definitionsItems.length > 0 && { items: definitionsItems };
+    const translationsData = translationsItems &&
+      translationsItems.length > 0 && { items: translationsItems };
     return this.constructResult(
       translation.original,
       translation.text,
+      fix,
       definitionsData,
       examplesData,
       translationsData

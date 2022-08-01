@@ -8,11 +8,10 @@ const client = new googleImages(
 
 class Search {
   static async searchExpressionInfo(expression) {
-    const type = 1;
+    const type = 0;
 
-    if (type == 0) {
-      const result = await client.search(expression);
-      return result;
+    if (type === 0) {
+      return await client.search(expression);
     }
     return await testJsonHelper.readTestFile();
     //client.search(expression).then((img) => {

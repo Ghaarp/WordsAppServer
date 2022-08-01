@@ -60,11 +60,39 @@ class CardDbHelper {
     );
 
     if (result) return true;
-    throw ApiError.internal("Database error");
+    throw ApiError.internal("Внутренняя ошибка сервера");
   }
 
-  static async getCardsList({ user }) {
-    if (!user) throw "Unknown user";
+  static async removeCard(user, cardId) {
+    if (!user) throw "Неизвестный пользователь";
+
+    const card = await Card.findOne({ where: { id: cardId } });
+    if (!card) return true;
+
+    if (card.ownerId !== user.id)
+      throw ApiError.badRequest("Только владелец может удалить карточку");
+
+    const result = await Card.destroy({
+      where: { ownerId: user.id, id: cardId },
+    });
+
+    if (result) return true;
+    throw ApiError.internal("Внутренняя ошибка сервера");
+  }
+
+  static async getCardsList({ user, count, page }) {
+    if (!user) throw "Неизвестный пользователь";
+
+    const cardsList = await CardDbHelper.getCards(user);
+
+    if (!cardsList) return;
+
+    const slicedList = cardsList.slice(count * page, count * page + count);
+    return { cards: slicedList, page, total: cardsList.length };
+  }
+
+  static async getCards(user) {
+    if (!user) throw "Неизвестный пользователь";
 
     const result = await sequelize.query(
       "WITH ids_table AS (SELECT \n" +

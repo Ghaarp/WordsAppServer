@@ -11,12 +11,12 @@ class UserController {
     const { login, password } = req.body;
 
     if (!isCorrectInput(req)) {
-      return next(ApiError.badRequest("No login or password"));
+      return next(ApiError.badRequest("Не указан логин или пароль"));
     }
 
     const foundUser = await UserHelper.findUser(login);
     if (!(await UserHelper.checkUserPasswordIsValid(foundUser, password))) {
-      return next(ApiError.badRequest("Wrong login or password"));
+      return next(ApiError.badRequest("Неверный логин или пароль"));
     }
 
     return res.json(UserHelper.generateJwt(foundUser));
@@ -26,12 +26,14 @@ class UserController {
     const { login, password } = req.body;
 
     if (!isCorrectInput(req)) {
-      return next(ApiError.badRequest("No login or password"));
+      return next(ApiError.badRequest("Не указан логин или пароль"));
     }
 
     const foundUser = await UserHelper.findUser(login);
     if (foundUser) {
-      return next(ApiError.badRequest("This user is already registered"));
+      return next(
+        ApiError.badRequest("Пользователь с таким логином уже зарегистрирован")
+      );
     }
 
     try {
