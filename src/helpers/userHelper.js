@@ -7,7 +7,7 @@ class UserHelper {
   static generateJwt(user) {
     const { id, login } = user;
     return jwt.sign({ id, login }, process.env.SECRET_KEY, {
-      expiresIn: "24h",
+      expiresIn: "365d",
     });
   }
 
