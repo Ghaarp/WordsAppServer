@@ -1,7 +1,6 @@
 const { User } = require("../models/model");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const ApiError = require("../Errors/ApiError");
 
 class UserHelper {
   static generateJwt(user) {

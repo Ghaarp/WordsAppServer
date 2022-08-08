@@ -1,6 +1,5 @@
 const cardRuntimeHelper = require("../helpers/cardRuntimeHelper");
 const runtimeHelper = require("../helpers/runtimeHelper");
-const ApiError = require("../Errors/ApiError");
 const cardDbHelper = require("../helpers/cardDbHelper");
 
 class CardController {
