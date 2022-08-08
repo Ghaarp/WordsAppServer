@@ -1,6 +1,6 @@
 const search = require("../core/search");
 const translator = require("../core/translator");
-const ApiError = require("../Errors/ApiError");
+const ApiError = require("../errors/ApiError");
 const cardDbHelper = require("./cardDbHelper");
 
 const minExpLength = 2;

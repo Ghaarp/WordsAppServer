@@ -1,5 +1,3 @@
-const ApiError = require("../Errors/ApiError");
-
 class RuntimeHelper {
   static async execute(next, action, params) {
     try {

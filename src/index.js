@@ -20,9 +20,6 @@ const start = async () => {
     await sequelize.authenticate();
     await sequelize.sync();
     app.listen(parseInt(PORT), () => console.log(`Started on port ${PORT}`));
-
-    //const translatorObject = new translator("bear");
-    //const translation = await translatorObject.translate();
   } catch (e) {
     console.log(e);
   }
