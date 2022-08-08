@@ -1,7 +1,7 @@
 const sequelize = require("../db");
 const { Friend } = require("../models/model");
 const userHelper = require("./userHelper");
-const ApiError = require("../Errors/ApiError");
+const ApiError = require("../errors/ApiError");
 
 class FriendDbHelper {
   static async findOne(userId, friendId) {

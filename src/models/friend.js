@@ -1,7 +1,6 @@
 const sequelize = require("../db");
 const { DataTypes } = require("sequelize");
 const tInt = DataTypes.INTEGER;
-const tString = DataTypes.STRING;
 const tBool = DataTypes.BOOLEAN;
 
 const Friend = sequelize.define("friend", {

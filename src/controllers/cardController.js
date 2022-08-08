@@ -1,12 +1,9 @@
 const cardRuntimeHelper = require("../helpers/cardRuntimeHelper");
 const runtimeHelper = require("../helpers/runtimeHelper");
-const ApiError = require("../Errors/ApiError");
 const cardDbHelper = require("../helpers/cardDbHelper");
 
 class CardController {
   async findExpressionInfo(req, res, next) {
-    const { user } = req.body;
-
     const result = await runtimeHelper.execute(
       next,
       cardRuntimeHelper.fetchExpressionInfo,
