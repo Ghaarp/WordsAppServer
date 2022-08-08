@@ -1,5 +1,5 @@
 const { Card } = require("../models/model");
-const ApiError = require("../errors/ApiError");
+const ApiError = require("../Errors/ApiError");
 const sequelize = require("../db");
 
 class CardDbHelper {

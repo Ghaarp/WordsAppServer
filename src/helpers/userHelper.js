@@ -1,6 +1,7 @@
 const { User } = require("../models/model");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const ApiError = require("../Errors/ApiError");
 
 class UserHelper {
   static generateJwt(user) {
@@ -8,6 +9,10 @@ class UserHelper {
     return jwt.sign({ id, login }, process.env.SECRET_KEY, {
       expiresIn: "365d",
     });
+  }
+
+  static getUser(req) {
+    return 1;
   }
 
   static async findUser(loginParameter) {
