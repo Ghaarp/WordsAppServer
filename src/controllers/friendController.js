@@ -1,5 +1,6 @@
 const friendDbHelper = require("../helpers/friendDbHelper");
 const runtimeHelper = require("../helpers/runtimeHelper");
+const ApiError = require("../Errors/ApiError");
 
 class FriendController {
   async inviteFriend(req, res, next) {

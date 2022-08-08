@@ -1,5 +1,5 @@
 const UserHelper = require("../helpers/userHelper");
-const ApiError = require("../errors/ApiError");
+const ApiError = require("../Errors/ApiError");
 
 const isCorrectInput = (req) => {
   const { login, password } = req.body;
